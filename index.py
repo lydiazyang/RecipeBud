@@ -2,7 +2,6 @@ import streamlit as st
 import cv2
 import os
 from app import *
-import json
 
 # Create a folder to save captured images
 if not os.path.exists("captured_images"):
@@ -18,11 +17,7 @@ def main():
     items = ['Item 1', 'Item 2', 'Item 3']
 
     #list to of Ingredients camptured
-<<<<<<< HEAD
-    ingredientsList =[] #list()
-=======
     ingredientsList =["apple", "orange", "mango", "potato", "cabbage", "carrot", "lentils"] #list()
->>>>>>> 37e4918 (implemented prompt for the nutrition expert.)
 
     # Define content for each item
     content = {
@@ -36,7 +31,6 @@ def main():
         with st.sidebar.expander(item):
             st.write(content[item])
     
-    button_clicked = st.sidebar.button('Done')
     
     # Create a VideoCapture object to access the webcam
     cap = cv2.VideoCapture(0)
@@ -59,6 +53,7 @@ def main():
         classification = classifyImage(image_path)
         ingredientsList.append(classification)
 
+    button_clicked = st.sidebar.button('Done')
     if button_clicked:
         displayRecipes(ingredientsList)
         print(ingredientsList)
@@ -79,26 +74,22 @@ def main():
 
 
 def displayRecipes(ingredientsList):
-    items = [
-    {"title": "Recipe 1", "content": "Content for Item 1."},
-    {"title": "Recipe 2", "content": "Content for Item 2."},
-    {"title": "Recipe 3", "content": "Content for Item 3."}
-    ]
+    items = []
+    #now we are gonna send the ingredient list to ask gpt
+    prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
+            Ingredients? give me possible list of recipes with Nutrition Facts per 100g from \
+            highest nutrition value to lowest. Give me results in \
+            followig format:\
+            ['title': 'Recipe title', 'content': 'recipe and nutritional facts per 100g']"
+    LLMResult = askGPT(prompt)
+    lystOfRecipes = LLMResult.split('\n\n')
+    for recipe in range(1, len(lystOfRecipes)-1):
+        items.append({"title": f"Recipe {recipe}", "content": lystOfRecipes[recipe]})
     # Display the items with expanding boxes
     for item in items:
         with st.expander(item["title"]):
             st.write(item["content"])
-    #now we are gonna send the ingredient list to ask gpt
-    prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
-            Ingredients? give me possible possible list of recipes with Nutrition Facts per 100g from\
-            highest nutrition value to lowest. Give me results in \
-            json format in the following format:\
-            ['title': 'Recipe title', 'content': 'recipe and nutritional facts per 100g']"
-    LLMResult = askGPT(prompt)
-    print(type(LLMResult))
-    json_object = json.loads(LLMResult)
-    print(type(json_object))
-    print(json_object)
+    
     
 
 def capture_image(cap):
