@@ -35,3 +35,4 @@ def classifyImage(image):
     result = pipe(image)
     return result[0]['label']
 
+
