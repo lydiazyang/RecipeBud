@@ -37,8 +37,8 @@ def main():
     cap = cv2.VideoCapture(0)
 
     # Set the video frame width and height (optional)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
 
     # Check if the webcam is opened correctly
     if not cap.isOpened():
