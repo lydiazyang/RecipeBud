@@ -1,44 +1,29 @@
 import streamlit as st
 import cv2
 import os
+from app import classifyImage
 
 # Create a folder to save captured images
 if not os.path.exists("captured_images"):
     os.makedirs("captured_images")
 
 def main():
-    st.title('NouriScan')
+    st.title('Image Capture App')
+    print(classifyImage("/Users/danishbokhari/Desktop/SpeakClear/captured_images/banaana.jpeg"))
 
     st.sidebar.header('Ingredients & Nutrition')
     
 
-    # List of items
-    items = ['Banana', 'Apple', 'Orange']
-
-    # Define content for each item
-    content = {
-        'Banana': "1o5 kcal/each, _ g Sugar, _ g Fat, _ g ",
-        'Apple': "80 kcal/each",
-        'Orange': "80 kcal/each"
-    }
-
-    # Display expanders for each item
-    for item in items:
-        with st.sidebar.expander(item):
-            st.write(content[item])
-
-
-    done_clicked = st.sidebar.button('Done')
-    
-
-    if done_clicked:
+    option1 = st.sidebar.checkbox('Banana')
+    option2 = st.sidebar.checkbox('Strawberry')
+    option3 = st.sidebar.checkbox('Kale')
+    option4 = st.sidebar.checkbox('Orange Juice')
+    option5 = st.sidebar.checkbox('Almond Milk')
+    button_clicked = st.sidebar.button('Done')
+    if button_clicked:
         displayRecipes()
 
-        
-    if not done_clicked:
-        vidCapture()
 
-def vidCapture():
     # Create a VideoCapture object to access the webcam
     cap = cv2.VideoCapture(0)
 
@@ -55,8 +40,7 @@ def vidCapture():
     video_placeholder = st.empty()
 
     # Button to capture image
-    capture_button_clicked = st.button("Capture Image")
-    if capture_button_clicked:
+    if st.button("Capture Image"):
         capture_image(cap)
 
     while True:
@@ -73,9 +57,8 @@ def vidCapture():
     # Release the VideoCapture and close the OpenCV window
     cap.release()
 
-    
+
 def displayRecipes():
-    
     items = [
     {"title": "Item 1", "content": "Content for Item 1."},
     {"title": "Item 2", "content": "Content for Item 2."},
@@ -86,6 +69,7 @@ def displayRecipes():
     for item in items:
         with st.expander(item["title"]):
             st.write(item["content"])
+
 
 
 def capture_image(cap):
