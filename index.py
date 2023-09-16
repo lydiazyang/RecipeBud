@@ -2,6 +2,7 @@ import streamlit as st
 import cv2
 import os
 from app import *
+import json
 
 # Create a folder to save captured images
 if not os.path.exists("captured_images"):
@@ -17,7 +18,11 @@ def main():
     items = ['Item 1', 'Item 2', 'Item 3']
 
     #list to of Ingredients camptured
+<<<<<<< HEAD
     ingredientsList =[] #list()
+=======
+    ingredientsList =["apple", "orange", "mango", "potato", "cabbage", "carrot", "lentils"] #list()
+>>>>>>> 37e4918 (implemented prompt for the nutrition expert.)
 
     # Define content for each item
     content = {
@@ -85,14 +90,16 @@ def displayRecipes(ingredientsList):
             st.write(item["content"])
     #now we are gonna send the ingredient list to ask gpt
     prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
-            Ingredients? give me possible recipe with Nutrition Facts per 100g. Give me results in \
-            python list in the following format:\
-            'title': 'Recipe title', 'content': 'recipe and nutritional facts per 100g'"
+            Ingredients? give me possible possible list of recipes with Nutrition Facts per 100g from\
+            highest nutrition value to lowest. Give me results in \
+            json format in the following format:\
+            ['title': 'Recipe title', 'content': 'recipe and nutritional facts per 100g']"
     LLMResult = askGPT(prompt)
-    print(LLMResult)
+    print(type(LLMResult))
+    json_object = json.loads(LLMResult)
+    print(type(json_object))
+    print(json_object)
     
-
-
 
 def capture_image(cap):
     # Read a frame from the webcam
