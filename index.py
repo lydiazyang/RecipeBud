@@ -13,12 +13,21 @@ def main():
 
     st.sidebar.header('Ingredients & Nutrition')
     
+    # List of items
+    items = ['Item 1', 'Item 2', 'Item 3']
 
-    option1 = st.sidebar.checkbox('Banana')
-    option2 = st.sidebar.checkbox('Strawberry')
-    option3 = st.sidebar.checkbox('Kale')
-    option4 = st.sidebar.checkbox('Orange Juice')
-    option5 = st.sidebar.checkbox('Almond Milk')
+    # Define content for each item
+    content = {
+        'Item 1': "This is the content for Item 1",
+        'Item 2': "This is the content for Item 2",
+        'Item 3': "This is the content for Item 3"
+    }
+
+    # Display expanders for each item
+    for item in items:
+        with st.sidebar.expander(item):
+            st.write(content[item])
+    
     button_clicked = st.sidebar.button('Done')
     if button_clicked:
         displayRecipes()
