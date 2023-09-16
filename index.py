@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import os
-from app import classifyImage
+from app import *
 
 # Create a folder to save captured images
 if not os.path.exists("captured_images"):
@@ -14,6 +14,9 @@ def main():
     
     # List of items
     items = ['Item 1', 'Item 2', 'Item 3']
+
+    #list to of Ingredients camptured
+    ingredientsList =["apple", "orange", "mango"] #list()
 
     # Define content for each item
     content = {
@@ -29,7 +32,7 @@ def main():
     
     button_clicked = st.sidebar.button('Done')
     if button_clicked:
-        displayRecipes()
+        displayRecipes(ingredientsList)
 
 
     # Create a VideoCapture object to access the webcam
@@ -47,12 +50,14 @@ def main():
     # Display a placeholder for the video stream
     video_placeholder = st.empty()
 
+    
+
     # Button to capture image
     if st.button("Capture Image"):
         image_path = capture_image(cap)
-        print(classifyImage(image_path))
-
-
+        classification = classifyImage(image_path)
+        ingredientsList.append(classification)
+    
     while True:
         # Read a frame from the webcam
         ret, frame = cap.read()
@@ -68,7 +73,7 @@ def main():
     cap.release()
 
 
-def displayRecipes():
+def displayRecipes(ingredientsList):
     items = [
     {"title": "Recipe 1", "content": "Content for Item 1."},
     {"title": "Recipe 2", "content": "Content for Item 2."},
@@ -79,6 +84,12 @@ def displayRecipes():
     for item in items:
         with st.expander(item["title"]):
             st.write(item["content"])
+    #now we are gonna send the ingredient list to ask gpt
+    prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
+            Ingredients? give me possible recipe with Nutrition Facts per 100g."
+    LLMResult = askGPT(prompt)
+    print(LLMResult)
+    
 
 
 
