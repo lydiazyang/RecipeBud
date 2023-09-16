@@ -9,7 +9,6 @@ if not os.path.exists("captured_images"):
 
 def main():
     st.title('Image Capture App')
-    print(classifyImage("/Users/danishbokhari/Desktop/SpeakClear/captured_images/banaana.jpeg"))
 
     st.sidebar.header('Ingredients & Nutrition')
     
@@ -41,7 +40,9 @@ def main():
 
     # Button to capture image
     if st.button("Capture Image"):
-        capture_image(cap)
+        image_path = capture_image(cap)
+        print(classifyImage(image_path))
+
 
     while True:
         # Read a frame from the webcam
@@ -84,6 +85,8 @@ def capture_image(cap):
     image_path = f"captured_images/captured_image_{len(os.listdir('captured_images')) + 1}.jpg"
     cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
     st.success(f"Image captured and saved as {image_path}")
+    return image_path
+
 
 if __name__ == '__main__':
     main()
