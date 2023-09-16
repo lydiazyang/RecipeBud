@@ -7,7 +7,7 @@ if not os.path.exists("captured_images"):
     os.makedirs("captured_images")
 
 def main():
-    st.title('Image Capture App')
+    st.title('NouriScan')
 
     st.sidebar.header('Ingredients & Nutrition')
     
@@ -21,39 +21,39 @@ def main():
     if button_clicked:
         displayRecipes()
 
+    if not button_clicked:
+        # Create a VideoCapture object to access the webcam
+        cap = cv2.VideoCapture(0)
 
-    # Create a VideoCapture object to access the webcam
-    cap = cv2.VideoCapture(0)
+        # Set the video frame width and height (optional)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-    # Set the video frame width and height (optional)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        # Check if the webcam is opened correctly
+        if not cap.isOpened():
+            st.error("Error: Unable to access the webcam.")
+            return
 
-    # Check if the webcam is opened correctly
-    if not cap.isOpened():
-        st.error("Error: Unable to access the webcam.")
-        return
+        # Display a placeholder for the video stream
+        video_placeholder = st.empty()
 
-    # Display a placeholder for the video stream
-    video_placeholder = st.empty()
+        # Button to capture image
+        if st.button("Capture Image"):
+            capture_image(cap)
 
-    # Button to capture image
-    if st.button("Capture Image"):
-        capture_image(cap)
+        while True:
+            # Read a frame from the webcam
+            ret, frame = cap.read()
 
-    while True:
-        # Read a frame from the webcam
-        ret, frame = cap.read()
+            if not ret:
+                st.error("Error: Unable to read frame from the webcam.")
+                break
 
-        if not ret:
-            st.error("Error: Unable to read frame from the webcam.")
-            break
+            # Display the frame in the Streamlit app
+            video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
 
-        # Display the frame in the Streamlit app
-        video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
-
-    # Release the VideoCapture and close the OpenCV window
-    cap.release()
+        # Release the VideoCapture and close the OpenCV window
+        cap.release()
 
 def displayRecipes():
     items = [
