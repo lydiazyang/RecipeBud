@@ -16,7 +16,7 @@ def main():
     items = ['Item 1', 'Item 2', 'Item 3']
 
     #list to of Ingredients camptured
-    ingredientsList =["apple", "orange", "mango"] #list()
+    ingredientsList =[] #list()
 
     # Define content for each item
     content = {
@@ -31,10 +31,7 @@ def main():
             st.write(content[item])
     
     button_clicked = st.sidebar.button('Done')
-    if button_clicked:
-        displayRecipes(ingredientsList)
-
-
+    
     # Create a VideoCapture object to access the webcam
     cap = cv2.VideoCapture(0)
 
@@ -50,13 +47,15 @@ def main():
     # Display a placeholder for the video stream
     video_placeholder = st.empty()
 
-    
-
     # Button to capture image
     if st.button("Capture Image"):
         image_path = capture_image(cap)
         classification = classifyImage(image_path)
         ingredientsList.append(classification)
+
+    if button_clicked:
+        displayRecipes(ingredientsList)
+        print(ingredientsList)
     
     while True:
         # Read a frame from the webcam
@@ -79,7 +78,6 @@ def displayRecipes(ingredientsList):
     {"title": "Recipe 2", "content": "Content for Item 2."},
     {"title": "Recipe 3", "content": "Content for Item 3."}
     ]
-
     # Display the items with expanding boxes
     for item in items:
         with st.expander(item["title"]):
