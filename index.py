@@ -86,7 +86,9 @@ def displayRecipes(ingredientsList):
             st.write(item["content"])
     #now we are gonna send the ingredient list to ask gpt
     prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
-            Ingredients? give me possible recipe with Nutrition Facts per 100g."
+            Ingredients? give me possible recipe with Nutrition Facts per 100g. Give me results in \
+            python list in the following format:\
+            'title': 'Recipe title', 'content': 'recipe and nutritional facts per 100g'"
     LLMResult = askGPT(prompt)
     print(LLMResult)
     
