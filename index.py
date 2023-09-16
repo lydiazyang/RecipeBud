@@ -8,8 +8,9 @@ if not os.path.exists("captured_images"):
     os.makedirs("captured_images")
 
 def main():
-    st.title('Image Capture App')
 
+    st.title('RecipeMate')
+    
     st.sidebar.header('Ingredients & Nutrition')
     
     # List of items
