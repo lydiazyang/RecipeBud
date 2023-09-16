@@ -18,10 +18,11 @@ def main():
     option4 = st.sidebar.checkbox('Orange Juice')
     option5 = st.sidebar.checkbox('Almond Milk')
     button_clicked = st.sidebar.button('Done')
+    back_button_clicked = st.button('Camera')
     if button_clicked:
         displayRecipes()
 
-    if not button_clicked:
+    if not button_clicked or back_button_clicked:
         # Create a VideoCapture object to access the webcam
         cap = cv2.VideoCapture(0)
 
