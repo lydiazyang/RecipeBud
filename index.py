@@ -17,7 +17,7 @@ def main():
 
     # Define content for each item
     content = {
-        'Banana': "1oo kcal/each",
+        'Banana': "1o5 kcal/each, _ g Sugar, _ g Fat, _ g ",
         'Apple': "80 kcal/each",
         'Orange': "80 kcal/each"
     }
