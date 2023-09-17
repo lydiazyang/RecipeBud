@@ -7,6 +7,19 @@ from app import *
 if not os.path.exists("captured_images"):
     os.makedirs("captured_images")
 
+background_style = """
+    <style>
+        [data-testid="stAppViewContainer"] {
+            background-image: url('https://i.ibb.co/HpYr6qg/Untitled-design-2.png'); 
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+"""
+st.markdown(background_style, unsafe_allow_html=True)
+
+
 # Initialize the session state
 session_state = st.session_state
 if 'ingredientsList' not in session_state:
@@ -14,9 +27,19 @@ if 'ingredientsList' not in session_state:
     #["apple", "banana", "orange", "strawberries"]
 
 def main():
-    
-    st.title('🧑🏽‍🍳 RecipeBud')
-    
+    # Create two columns
+    col1, col2 = st.columns([1, 5])
+
+    # In the first column, display the title
+    with col1:
+        logo = st.image("https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/002/589/585/datas/medium.png", width=150)
+
+        
+
+    # In the second column, display the logo image
+    with col2:
+        st.title('RecipeBud')
+
     st.sidebar.header('Ingredients & Nutrition')
     # List of items
     #items = ['Item 1', 'Item 2', 'Item 3']
@@ -38,6 +61,22 @@ def main():
 
     # Display a placeholder for the video stream
     video_placeholder = st.empty()
+
+    # Apply custom CSS for the button
+    st.markdown(
+        """
+        <style>
+            .stButton>button {
+                background-color: #4CAF50; /* Green */
+                color: white;
+                border: none;
+                border-radius: 5px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Button to capture image
     if st.button("Capture Image"):
         image_path = capture_image()
@@ -88,13 +127,17 @@ def displayRecipes(ingredientsList):
             Ingredients? Give me A list of detailed recipes with measurements containing these ingredients with Nutrition Facts per 100g based on the widely accepted nutritional value of each of these ingredients. Rank the list from \
             highest nutritional value to lowest. Give me results in \
             following format and do not deviate from this format:\
-            ['Recipe Title', 'content of recipe and nutritional facts per 100g']. Only give me the list. Do not add commentary or personalized responses. Keep it under 200 words."
+            ['Recipe Title', 'nutritional facts per serving and content of recipe']."
     #prompt = f"You are going to act as a nutritional expert who has a lot of knowledge about food. I have the following ingredients: {','.join(ingredientsList)}. What can I make with these ingredients? Give me a list of names of recipes, maximum five."
     LLMResult = askGPT(prompt)
     lystOfRecipes = LLMResult.split('\n\n')
     # print(lystOfRecipes)
+    count = 0
     for recipe in range(1,len(lystOfRecipes)-1):
+        count += 1
         items.append({"title": lystOfRecipes[recipe].split(":")[0], "content": ""})
+        if count == 4:
+            break
     # Display the items with =expanding boxes
     for item in items:
         #for side bar's item
@@ -132,6 +175,7 @@ def capture_image():
 
     # Release the VideoCapture and close the OpenCV window
     cap.release()
+    
     return image_path
 
 
