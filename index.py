@@ -7,17 +7,18 @@ from app import *
 if not os.path.exists("captured_images"):
     os.makedirs("captured_images")
 
-def main():
+# Initialize the session state
+session_state = st.session_state
+if 'ingredientsList' not in session_state:
+    session_state['ingredientsList'] = []
 
+def main():
+    
     st.title('RecipeMate')
     
     st.sidebar.header('Ingredients & Nutrition')
-    
     # List of items
     items = ['Item 1', 'Item 2', 'Item 3']
-
-    #list to of Ingredients camptured
-    ingredientsList =["apple", "orange", "mango", "potato", "cabbage", "carrot", "lentils"] #list()
 
     # Define content for each item
     content = {
@@ -30,8 +31,6 @@ def main():
     for item in items:
         with st.sidebar.expander(item):
             st.write(content[item])
-    
-    
     # Create a VideoCapture object to access the webcam
     cap = cv2.VideoCapture(0)
 
@@ -46,20 +45,21 @@ def main():
 
     # Display a placeholder for the video stream
     video_placeholder = st.empty()
-
     # Button to capture image
     if st.button("Capture Image"):
-        image_path = capture_image(cap)
+        image_path = capture_image()
         classification = classifyImage(image_path)
-        ingredientsList.append(classification)
+        session_state['ingredientsList'].append(classification)
 
-    button_clicked = st.sidebar.button('Done')
-    if button_clicked:
-        displayRecipes(ingredientsList)
-        print(ingredientsList)
+    # Button to indicate done
+    done_button = st.sidebar.button('Done')
+
+    # Display the captured ingredients
+    st.write("Captured Ingredients:", session_state['ingredientsList'])
     
-    while True:
-        # Read a frame from the webcam
+    # Display recipes if "Done" is clicked
+    while not done_button:
+    # Read a frame from the webcam
         ret, frame = cap.read()
 
         if not ret:
@@ -68,10 +68,11 @@ def main():
 
         # Display the frame in the Streamlit app
         video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
-
-    # Release the VideoCapture and close the OpenCV window
-    cap.release()
-
+    if done_button:
+        cap.release()
+        if session_state['ingredientsList']:
+            session_state['ingredientsList'].pop()
+        displayRecipes(session_state['ingredientsList'])
 
 def displayRecipes(ingredientsList):
     items = []
@@ -90,9 +91,20 @@ def displayRecipes(ingredientsList):
         with st.expander(item["title"]):
             st.write(item["content"])
     
-    
 
-def capture_image(cap):
+def capture_image():
+    # Create a VideoCapture object to access the webcam
+    cap = cv2.VideoCapture(0)
+
+    # Set the video frame width and height (optional)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 400)
+
+    # Check if the webcam is opened correctly
+    if not cap.isOpened():
+        st.error("Error: Unable to access the webcam.")
+        return
+
     # Read a frame from the webcam
     ret, frame = cap.read()
 
@@ -104,6 +116,10 @@ def capture_image(cap):
     image_path = f"captured_images/captured_image_{len(os.listdir('captured_images')) + 1}.jpg"
     cv2.imwrite(image_path, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
     st.success(f"Image captured and saved as {image_path}")
+
+    # Release the VideoCapture and close the OpenCV window
+    cap.release()
+    
     return image_path
 
 
