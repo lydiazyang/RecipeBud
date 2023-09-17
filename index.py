@@ -14,7 +14,7 @@ if 'ingredientsList' not in session_state:
 
 def main():
     
-    st.title('RecipeMate')
+    st.title('🧑🏽‍🍳 RecipeBud')
     
     st.sidebar.header('Ingredients & Nutrition')
     # List of items
