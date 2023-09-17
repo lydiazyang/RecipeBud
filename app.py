@@ -44,16 +44,18 @@ def analyze_nutrition(ingredients):
     # Edamam API application ID and key
     app_id = "26722303"
     app_key = "44f19a04e17d83e91706e4047804e690"
+    processed_ingredients = set()
+    food_dict= {}
 
     for ingredient in ingredients:
+        if ingredient in processed_ingredients:
+          continue
         # Parameters for the API request
         params = {
             "app_id": app_id,
             "app_key": app_key,
             "ingr": ingredient
         }
-        print(ingredient)
-
         try:
             # Send a GET request to the API
             response = requests.get(endpoint, params=params)
@@ -63,24 +65,26 @@ def analyze_nutrition(ingredients):
                 # Parse the JSON response
                 data = response.json()
 
-                # Print the nutritional information for the ingredient
-                print("Nutritional Information for", ingredient)
-                print("Calories:", data['calories'])
-                print("Calories from Protein:", data['totalNutrientsKCal']['PROCNT_KCAL']['quantity'])
-                print("Calories from Fat:", data['totalNutrientsKCal']['FAT_KCAL']['quantity'])
-                print("Calories from Carbohydrates:", data['totalNutrientsKCal']['CHOCDF_KCAL']['quantity'])
-                print("Grams in Protein:", data['totalNutrients']['PROCNT']['quantity'])
-                print("Grams in Carbohydrates:", data['totalNutrients']['CHOCDF']['quantity'])
-                print()  # Add a newline for separation
+                food_dict[ingredient] = {
+                    'Calories': str(data['calories']) + "kcal",
+                    'Calories from Protein': str(data['totalNutrientsKCal']['PROCNT_KCAL']['quantity']) + "kcal",
+                    'Calories from Fat': str(data['totalNutrientsKCal']['FAT_KCAL']['quantity']) + "kcal",
+                    'Calories from Carbohydrates': str(data['totalNutrientsKCal']['CHOCDF_KCAL']['quantity']) + "kcal",
+                    'Grams in Protein': str(data['totalNutrients']['PROCNT']['quantity']) + "g",
+                    'Grams in Carbohydrates': str(data['totalNutrients']['CHOCDF']['quantity']) +"g"
+                }
 
+                processed_ingredients.add(ingredient)
             else:
                 print("Error for", ingredient, ":", response.status_code)
 
         except requests.exceptions.RequestException as e:
             print("Error for", ingredient, ":", e)
+    return food_dict
+
 
 # Example ingredients list
-ingredients = ["Orange per 100 grams", "Apple per 100 grams", "Banana per 100 grams"]
+# ingredients = ["Orange per 100 grams", "Apple per 100 grams", "Banana per 100 grams"]
 
-# Analyze nutrition for all ingredients
-analyze_nutrition(ingredients)
+# # # Analyze nutrition for all ingredients
+# print(analyze_nutrition(ingredients))

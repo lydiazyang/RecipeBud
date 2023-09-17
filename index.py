@@ -2,6 +2,7 @@ import streamlit as st
 import cv2
 import os
 from app import *
+import pprint
 
 # Create a folder to save captured images
 if not os.path.exists("captured_images"):
@@ -19,12 +20,12 @@ background_style = """
 """
 st.markdown(background_style, unsafe_allow_html=True)
 
-
 # Initialize the session state
 session_state = st.session_state
 if 'ingredientsList' not in session_state:
     session_state['ingredientsList'] = []
     #["apple", "banana", "orange", "strawberries"]
+xyz = ["apple", "banana", "orange", "strawberries"]
 
 def main():
     # Create two columns
@@ -103,6 +104,7 @@ def main():
         # Display the frame in the Streamlit app
         video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
     if button_clicked:
+        nutrition_values = analyze_nutrition(nutrients(xyz))
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
@@ -111,14 +113,23 @@ def main():
         displayRecipes(session_state['ingredientsList'])
         # Define content for each item
         content = {}
-        for ingredient in session_state['ingredientsList']:
-            content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
+        for ingredient in nutrition_values:
+            # content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
+            content[ingredient] = nutrition_values[ingredient]
 
         # Display expanders for each item
-        for ingredient in session_state['ingredientsList']:
+        # for ingredient in session_state['ingredientsList']:
+        #     with st.sidebar.expander(ingredient):
+        #         st.write(content[ingredient])
+        # displayRecipes(session_state['ingredientsList'])
+        
+        for ingredient in content:
             with st.sidebar.expander(ingredient):
-                st.write(content[ingredient])
-        displayRecipes(session_state['ingredientsList'])
+                ingred = str(content[ingredient])
+                st.write(ingred[1:len(ingred)-1].replace("'", "").replace(',', '\n\n'))
+        #displayRecipes(session_state['ingredientsList'])
+
+
 
 def displayRecipes(ingredientsList):
     items = []
@@ -179,5 +190,13 @@ def capture_image():
     return image_path
 
 
+def nutrients(ingredients):
+    formatted_list = []
+    for ingredient in ingredients:
+        formatted_list.append(ingredient + " per 100 grams")
+    return formatted_list
+
+
 if __name__ == '__main__':
     main()
+
