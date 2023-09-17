@@ -58,7 +58,6 @@ def main():
     done_button = st.sidebar.button('Done')
 
     # Display the captured ingredients
-    st.write("Captured Ingredients:", session_state['ingredientsList'])
     
     # Display recipes if "Done" is clicked
     while not done_button:
@@ -75,6 +74,8 @@ def main():
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
+        st.write("Updated Ingredients List:", session_state['ingredientsList'])
+
         displayRecipes(session_state['ingredientsList'])
 
 def displayRecipes(ingredientsList):
