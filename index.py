@@ -124,10 +124,10 @@ def displayRecipes(ingredientsList):
     items = []
     #now we are gonna send the ingredient list to ask gpt
     prompt = f"I have following Ingredients :{','.join(ingredientsList)}. What can I make with these \
-            Ingredients? Give me A list of detailed recipes with measurements containing these ingredients with Nutrition Facts per 100g based on the widely accepted nutritional value of each of these ingredients. Rank the list from \
+            Ingredients? Give me A list of detailed recipes with measurements containing these ingredients with Nutrition Facts (calories, grams of sugar, grams of protein, grams of fats, grams of carbohydrates) per serving based on the widely accepted nutritional value of each of these ingredients. Rank the list from \
             highest nutritional value to lowest. Give me results in \
             following format and do not deviate from this format:\
-            ['Recipe Title', 'nutritional facts per serving and content of recipe']."
+            ['Recipe Title', 'Calories per serving']."
     #prompt = f"You are going to act as a nutritional expert who has a lot of knowledge about food. I have the following ingredients: {','.join(ingredientsList)}. What can I make with these ingredients? Give me a list of names of recipes, maximum five."
     LLMResult = askGPT(prompt)
     lystOfRecipes = LLMResult.split('\n\n')
