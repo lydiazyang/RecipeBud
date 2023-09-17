@@ -10,7 +10,8 @@ if not os.path.exists("captured_images"):
 # Initialize the session state
 session_state = st.session_state
 if 'ingredientsList' not in session_state:
-    session_state['ingredientsList'] = ["apple", "banana", "orange", "strawberries"]
+    session_state['ingredientsList'] = []
+    #["apple", "banana", "orange", "strawberries"]
 
 def main():
     

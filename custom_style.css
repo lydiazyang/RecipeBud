@@ -1,9 +1,0 @@
-/* custom_style.css */
-
-.st-expander > summary {
-    background-color: #4CAF50; /* Green */
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-}
