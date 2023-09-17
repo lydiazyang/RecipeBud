@@ -21,7 +21,7 @@ def main():
     #items = ['Item 1', 'Item 2', 'Item 3']
 
     #list to of Ingredients camptured
-    ingredientsList =["apple", "orange", "mango"] #list()
+    #ingredientsList =["apple", "orange", "mango"] #list()
 
     
     
@@ -47,26 +47,16 @@ def main():
         session_state['ingredientsList'].append(classification)
 
     # Button to indicate done
-    done_button = st.sidebar.button('Done')
+    #done_button = st.sidebar.button('Done')
 
     # Display the captured ingredients
     st.write("Captured Ingredients:", session_state['ingredientsList'])
 
     button_clicked = st.sidebar.button('Done')
-    if button_clicked:
-        # Define content for each item
-        content = {}
-        for ingredient in ingredientsList:
-            content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
-
-        # Display expanders for each item
-        for ingredient in ingredientsList:
-            with st.sidebar.expander(ingredient):
-                st.write(content[ingredient])
-        displayRecipes(ingredientsList)
+    
     
     # Display recipes if "Done" is clicked
-    while not done_button:
+    while not button_clicked:
     # Read a frame from the webcam
         ret, frame = cap.read()
 
@@ -76,10 +66,20 @@ def main():
 
         # Display the frame in the Streamlit app
         video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
-    if done_button:
+    if button_clicked:
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
+        displayRecipes(session_state['ingredientsList'])
+        # Define content for each item
+        content = {}
+        for ingredient in session_state['ingredientsList']:
+            content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
+
+        # Display expanders for each item
+        for ingredient in session_state['ingredientsList']:
+            with st.sidebar.expander(ingredient):
+                st.write(content[ingredient])
         displayRecipes(session_state['ingredientsList'])
 
 def displayRecipes(ingredientsList):
