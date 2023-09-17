@@ -69,7 +69,7 @@ def main():
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
-        st.write("Updated Ingredients List:", session_state['ingredientsList'])
+        #st.write("Updated Ingredients List:", session_state['ingredientsList'])
 
         displayRecipes(session_state['ingredientsList'])
         # Define content for each item
@@ -90,10 +90,11 @@ def displayRecipes(ingredientsList):
             Ingredients? Give me A list of detailed recipes with measurements containing these ingredients with Nutrition Facts per 100g based on the widely accepted nutritional value of each of these ingredients. Rank the list from \
             highest nutritional value to lowest. Give me results in \
             following format and do not deviate from this format:\
-            ['Recipe title', 'content of recipe and nutritional facts per 100g']. Only give me the list. Do not add commentary or personalized responses."
+            ['Recipe title', 'content of recipe and nutritional facts per 100g']. Only give me the list. Do not add commentary or personalized responses. Keep it under 200 words."
+    #prompt = f"You are going to act as a nutritional expert who has a lot of knowledge about food. I have the following ingredients: {','.join(ingredientsList)}. What can I make with these ingredients? Give me a list of names of recipes, maximum five."
     LLMResult = askGPT(prompt)
     lystOfRecipes = LLMResult.split('\n\n')
-    print(lystOfRecipes)
+    # print(lystOfRecipes)
     for recipe in range(1,len(lystOfRecipes)-1):
         items.append({"title": lystOfRecipes[recipe].split(":")[0], "content": ""})
     # Display the items with =expanding boxes
