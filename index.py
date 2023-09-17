@@ -50,10 +50,20 @@ def main():
     #done_button = st.sidebar.button('Done')
 
     # Display the captured ingredients
-    st.write("Captured Ingredients:", session_state['ingredientsList'])
+    #st.write("Captured Ingredients:", session_state['ingredientsList'])
 
     button_clicked = st.sidebar.button('Done')
-    
+    if button_clicked:
+        # Define content for each item
+        content = {}
+        for ingredient in session_state['ingredientsList']:
+            content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
+
+        # Display expanders for each item
+        for ingredient in session_state['ingredientsList']:
+            with st.sidebar.expander(ingredient):
+                st.write(content[ingredient])
+        displayRecipes(session_state['ingredientsList'])
     
     # Display recipes if "Done" is clicked
     while not button_clicked:
@@ -70,6 +80,8 @@ def main():
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
+        st.write("Updated Ingredients List:", session_state['ingredientsList'])
+
         displayRecipes(session_state['ingredientsList'])
         # Define content for each item
         content = {}
