@@ -23,9 +23,8 @@ st.markdown(background_style, unsafe_allow_html=True)
 # Initialize the session state
 session_state = st.session_state
 if 'ingredientsList' not in session_state:
-    session_state['ingredientsList'] = []
-    #["apple", "banana", "orange", "strawberries"]
-xyz = ["apple", "banana", "orange", "strawberries"]
+    session_state['ingredientsList'] = ["apple", "orange", "orange"]
+# xyz = ["apple", "yerba mate", "orange", "orange"]
 
 def main():
     # Create two columns
@@ -82,13 +81,13 @@ def main():
     if st.button("Capture Image"):
         image_path = capture_image()
         classification = classifyImage(image_path)
-        session_state['ingredientsList'].append(classification)
+        #session_state['ingredientsList'].append(classification)
 
     # Button to indicate done
     #done_button = st.sidebar.button('Done')
 
     # Display the captured ingredients
-    #st.write("Captured Ingredients:", session_state['ingredientsList'])
+    # st.write("Captured Ingredients:", session_state['ingredientsList'])
 
     button_clicked = st.sidebar.button('Done')
     
@@ -104,13 +103,13 @@ def main():
         # Display the frame in the Streamlit app
         video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB", use_column_width=True)
     if button_clicked:
-        nutrition_values = analyze_nutrition(nutrients(xyz))
+        nutrition_values = analyze_nutrition(nutrients(session_state['ingredientsList']))
         cap.release()
         if session_state['ingredientsList']:
             session_state['ingredientsList'].pop()
         #st.write("Updated Ingredients List:", session_state['ingredientsList'])
 
-        displayRecipes(session_state['ingredientsList'])
+        # displayRecipes(session_state['ingredientsList'])
         # Define content for each item
         content = {}
         for ingredient in nutrition_values:
@@ -127,7 +126,7 @@ def main():
             with st.sidebar.expander(ingredient):
                 ingred = str(content[ingredient])
                 st.write(ingred[1:len(ingred)-1].replace("'", "").replace(',', '\n\n'))
-        #displayRecipes(session_state['ingredientsList'])
+        displayRecipes(session_state['ingredientsList'])
 
 
 
@@ -199,4 +198,3 @@ def nutrients(ingredients):
 
 if __name__ == '__main__':
     main()
-
