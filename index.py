@@ -10,7 +10,7 @@ if not os.path.exists("captured_images"):
 # Initialize the session state
 session_state = st.session_state
 if 'ingredientsList' not in session_state:
-    session_state['ingredientsList'] = []
+    session_state['ingredientsList'] = ["apple", "banana", "orange", "strawberries"]
 
 def main():
     
@@ -22,10 +22,7 @@ def main():
 
     #list to of Ingredients camptured
     #ingredientsList =["apple", "orange", "mango"] #list()
-
-    
-    
-    
+   
     # Create a VideoCapture object to access the webcam
     cap = cv2.VideoCapture(0)
 
@@ -90,7 +87,7 @@ def displayRecipes(ingredientsList):
             Ingredients? Give me A list of detailed recipes with measurements containing these ingredients with Nutrition Facts per 100g based on the widely accepted nutritional value of each of these ingredients. Rank the list from \
             highest nutritional value to lowest. Give me results in \
             following format and do not deviate from this format:\
-            ['Recipe title', 'content of recipe and nutritional facts per 100g']. Only give me the list. Do not add commentary or personalized responses. Keep it under 200 words."
+            ['Recipe Title', 'content of recipe and nutritional facts per 100g']. Only give me the list. Do not add commentary or personalized responses. Keep it under 200 words."
     #prompt = f"You are going to act as a nutritional expert who has a lot of knowledge about food. I have the following ingredients: {','.join(ingredientsList)}. What can I make with these ingredients? Give me a list of names of recipes, maximum five."
     LLMResult = askGPT(prompt)
     lystOfRecipes = LLMResult.split('\n\n')
