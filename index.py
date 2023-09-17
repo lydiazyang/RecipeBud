@@ -131,7 +131,6 @@ def capture_image():
 
     # Release the VideoCapture and close the OpenCV window
     cap.release()
-    
     return image_path
 
 
