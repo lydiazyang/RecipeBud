@@ -14,24 +14,16 @@ if 'ingredientsList' not in session_state:
 
 def main():
     
-    st.title('RecipeMate')
+    st.title('🧑🏽‍🍳 RecipeBud')
     
     st.sidebar.header('Ingredients & Nutrition')
     # List of items
     #items = ['Item 1', 'Item 2', 'Item 3']
 
     #list to of Ingredients camptured
-    ingredientsList =["apple", "orange", "mango", "potato", "cabbage", "carrot", "lentils"] #list()
+    ingredientsList =["apple", "orange", "mango"] #list()
 
-    # Define content for each item
-    content = {}
-    for ingredient in ingredientsList:
-        content[ingredient] = askGPT(f"Give me your estimate the calories, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
-
-    # Display expanders for each item
-    for ingredient in ingredientsList:
-        with st.sidebar.expander(ingredient):
-            st.write(content[ingredient])
+    
     
     
     # Create a VideoCapture object to access the webcam
@@ -58,6 +50,23 @@ def main():
     done_button = st.sidebar.button('Done')
 
     # Display the captured ingredients
+<<<<<<< HEAD
+=======
+    st.write("Captured Ingredients:", session_state['ingredientsList'])
+
+    button_clicked = st.sidebar.button('Done')
+    if button_clicked:
+        # Define content for each item
+        content = {}
+        for ingredient in ingredientsList:
+            content[ingredient] = askGPT(f"Give me your estimate the calories, grams of protein, grams of sugar, grams of fat, and grams of carbohydrates per 100g of {ingredient} as a list")
+
+        # Display expanders for each item
+        for ingredient in ingredientsList:
+            with st.sidebar.expander(ingredient):
+                st.write(content[ingredient])
+        displayRecipes(ingredientsList)
+>>>>>>> 6f12f411d2dc6e013023862698ddcf03e7dc6075
     
     # Display recipes if "Done" is clicked
     while not done_button:
