@@ -38,8 +38,16 @@ def main():
 
     # Display a placeholder for the video stream
     video_placeholder = st.empty()
+
+    st.markdown("""
+    <style>
+        [data-testid=stSidebar] {
+            background-color: green;
+        }
+    </style>
+    """, unsafe_allow_html=True)
     # Button to capture image
-    if st.button("Capture Image"):
+    if st.button("Capture Image", type="green"):
         image_path = capture_image()
         classification = classifyImage(image_path)
         session_state['ingredientsList'].append(classification)
@@ -93,8 +101,12 @@ def displayRecipes(ingredientsList):
     LLMResult = askGPT(prompt)
     lystOfRecipes = LLMResult.split('\n\n')
     # print(lystOfRecipes)
+    count = 0
     for recipe in range(1,len(lystOfRecipes)-1):
+        count += 1
         items.append({"title": lystOfRecipes[recipe].split(":")[0], "content": ""})
+        if count == 4:
+            break
     # Display the items with =expanding boxes
     for item in items:
         #for side bar's item
@@ -132,6 +144,7 @@ def capture_image():
 
     # Release the VideoCapture and close the OpenCV window
     cap.release()
+    
     return image_path
 
 
