@@ -1,6 +1,10 @@
 ---
 license: apache-2.0
 ---
+<p align="center">
+  <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/002/589/585/datas/medium.png">
+</p>
+
 ## Inspiration
 The inspiration stemmed from a passion for promoting health and wellness through food. We were driven by the desire to address the prevalent lack of accessible and easy-to-understand nutritional information. It's a common struggle for people to decide what they can make with the ingredients that they have at home, oftentimes letting groceries they bought earlier in the week or month go bad in favor of the convenience of ordering food to their doorstep. With our app, we aid in minimizing food waste by giving people tasty and easy options to finish up what's left in the fridge, not letting a penny or ingredient go to waste. For many of us college students, leaving the comfort of home-cooked meals and having to sustain ourselves has left us making unhealthy and often not financially smart food decisions rather than cooking, so as to "save ourselves the hassle." But had we had an app like RecipeBud, we're sure that more students like us could see themselves buying groceries and cooking at home. Not only does this save us the extra buck, but contributes to a healthier lifestyle. 
 
